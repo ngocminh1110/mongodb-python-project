@@ -80,7 +80,51 @@ def delete_grade():
     db.grades.delete_one({"_id": ObjectId(grade_id)})
     print("Grade deleted!")
 
+def insert_sample_data():
+    if db.courses.count_documents({}) == 0:
+        db.courses.insert_many([
+            {
+                "name": "Introduction to NoSQL",
+                "teacher_name": "John Smith",
+                "credits": 5,
+                "year": 2024,
+                "semester": "Spring",
+                "topics": ["MongoDB", "NoSQL", "Database"]
+            },
+            {
+                "name": "Business Intelligence",
+                "teacher_name": "Mary Johnson",
+                "credits": 3,
+                "year": 2024,
+                "semester": "Fall",
+                "topics": ["Power BI", "Data Analysis"]
+            }
+        ])
+        print("Sample courses added!")
+
+    if db.grades.count_documents({}) == 0:
+        course = db.courses.find_one()
+        db.grades.insert_many([
+            {
+                "course_id": course["_id"],
+                "student_name": "Alice Brown",
+                "student_number": "HH-2024-001",
+                "grade": 5,
+                "comment": "Excellent work"
+            },
+            {
+                "course_id": course["_id"],
+                "student_name": "Bob Wilson",
+                "student_number": "HH-2024-002",
+                "grade": 3,
+                "comment": "Good effort"
+            }
+        ])
+        print("Sample grades added!")
+
 def main():
+    insert_sample_data()
+
     while True:
         print("\n========== GRADE DATABASE ==========")
         print("COURSES:")
